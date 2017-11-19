@@ -124,6 +124,7 @@ public class ContainerView
         if (curDrawer != null) {
             curDrawer.setSize(w, h);
             needDrawNextFrame = curDrawer.draw(canvas, curDrawerAlpha);
+            Log.i("bloodsoul", "curDrawerAlpha 111 --> " + curDrawerAlpha);
         }
 
         Log.i("bloodsoul", "this.preDrawer == null --> " + (this.preDrawer == null));
@@ -131,6 +132,7 @@ public class ContainerView
             needDrawNextFrame = true;
             preDrawer.setSize(w, h);
             preDrawer.draw(canvas, 1f - curDrawerAlpha);
+            Log.i("bloodsoul", "curDrawerAlpha 222 --> " + curDrawerAlpha);
         }
         if (curDrawerAlpha < 1f) {
             curDrawerAlpha += 0.04f;

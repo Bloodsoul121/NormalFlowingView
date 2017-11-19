@@ -179,11 +179,12 @@ public class PreferenceFloatingDrawer
                  * 移动时间
                  */
                 long moveTime = System.currentTimeMillis() - currentMS;
-                //判断是否继续传递信号
-                if (isClick(moveTime)) {
+                //判断是否继续传递信号 , 滑动
+                if (isClickMove(moveTime)) {
                     //不再执行后面的事件，在这句前可写要执行的触摸相关代码。点击事件是发生在触摸弹起后
                     break;
                 } else {
+                    // 点击
                     for (IBaseHolder hold : getIHolders()) {
                         if (hold instanceof CircleHolder) {
                             CircleHolder holder = ((CircleHolder) hold);
@@ -215,7 +216,7 @@ public class PreferenceFloatingDrawer
         }
     }
 
-    private boolean isClick(long moveTime) {
+    private boolean isClickMove(long moveTime) {
         return moveTime > ViewConfiguration.getTapTimeout() || (moveX > 20 || moveY > 20);
     }
 }
