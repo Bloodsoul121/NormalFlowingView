@@ -1,13 +1,10 @@
 package com.example.bloodsoul.normalflowingview;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 
 import com.example.bloodsoul.normalflowingview.flowview.ContainerView;
 import com.example.bloodsoul.normalflowingview.flowview.PreferenceFloatingDrawer;
@@ -18,7 +15,7 @@ public class FlowActivity
 
     private ContainerView containerView;
 
-    private Button        mBtn;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +24,8 @@ public class FlowActivity
 
         Log.i("FlowActivity", "start --> " + AnimationUtils.currentAnimationTimeMillis());
 
-        mBtn = (Button) findViewById(R.id.btn);
-
         containerView = (ContainerView) findViewById(R.id.floatingView);
-//        ViewGroup.LayoutParams params = containerView.getLayoutParams();
-//        params.width = getMetricsWidth(this)* 7/5;
-//        containerView.setLayoutParams(params);
+
         containerView.setDrawer(new PreferenceFloatingDrawer(this));
 
         Log.i("FlowActivity", "end --> " + AnimationUtils.currentAnimationTimeMillis());
@@ -41,28 +34,29 @@ public class FlowActivity
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("FlowActivity", "onResume --> " + AnimationUtils.currentAnimationTimeMillis());
         containerView.onResume();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                containerView.setDrawerStop(false);
+                containerView.start();
+            }
+        }, 100);
     }
     @Override
     protected void onPause() {
+        Log.i("FlowActivity", "onPause --> " + AnimationUtils.currentAnimationTimeMillis());
         super.onPause();
         containerView.onPause();
+        containerView.setDrawerStop(true);
     }
     @Override
     protected void onDestroy() {
+        Log.i("FlowActivity", "onDestroy --> " + AnimationUtils.currentAnimationTimeMillis());
         super.onDestroy();
         containerView.onDestroy();
-    }
-
-    public static int getMetricsWidth(Context context) {
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        return dm.widthPixels;
-    }
-
-    public void clickBtn(View view) {
-        containerView.start();
-        containerView.setDrawerStop(false);
-        mBtn.setVisibility(View.GONE);
     }
 
 }

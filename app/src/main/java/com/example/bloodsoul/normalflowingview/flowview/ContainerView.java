@@ -63,7 +63,6 @@ public class ContainerView
             return;
         }
         if (drawer != curDrawer) {
-//            curDrawer = drawer;
             initDrawer(drawer);
         }
     }
@@ -103,6 +102,8 @@ public class ContainerView
                 }
             }
         }
+
+        Log.i("bloodsoul", "this.preDrawer == null --> " + (this.preDrawer == null));
         if (this.preDrawer != null) {
             synchronized (preDrawer) {
                 if (this.preDrawer != null) {
@@ -124,6 +125,8 @@ public class ContainerView
             curDrawer.setSize(w, h);
             needDrawNextFrame = curDrawer.draw(canvas, curDrawerAlpha);
         }
+
+        Log.i("bloodsoul", "this.preDrawer == null --> " + (this.preDrawer == null));
         if (preDrawer != null && curDrawerAlpha < 1f) {
             needDrawNextFrame = true;
             preDrawer.setSize(w, h);

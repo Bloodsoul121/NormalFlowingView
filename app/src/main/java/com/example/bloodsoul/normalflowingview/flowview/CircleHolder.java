@@ -157,16 +157,26 @@ public class CircleHolder implements IBaseHolder {
             paint.getTextBounds(name, 0, name.length(), rect);
             paint.setColor(smallColor);
             canvas.drawText(name, curCX - rect.width() / 2, curCY + rect.height() / 2, paint);
-        }else{
-            if (null==thirdCircles) {
+        }
+        else {
+            if (null == thirdCircles) {
                 return;
             }
+
             paint.setColor(smallColor);
+
             //绘制两个背景圆圈
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(1.5F);
-            canvas.drawCircle(cx+10 + dx * curPercent*1.3f, cy+20 + dy * curPercent*1.5f, radius, paint);
-            canvas.drawCircle(cx+20 + dx * curPercent*1.4f, cy+10 + dy * curPercent*1.1f, radius, paint);
+            canvas.drawCircle(cx + 10 + dx * curPercent * 1.3f,
+                              cy + 20 + dy * curPercent * 1.5f,
+                              radius,
+                              paint);
+            canvas.drawCircle(cx + 20 + dx * curPercent * 1.4f,
+                              cy + 10 + dy * curPercent * 1.1f,
+                              radius,
+                              paint);
+
             paint.setStyle(Paint.Style.FILL);
 
             //斜边长度为 小圆的半径+间距+最小圆的半径
