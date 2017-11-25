@@ -1,4 +1,4 @@
-package com.example.bloodsoul.normalflowingview.flowview;
+package com.example.bloodsoul.normalflowingview.flowview.holder;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
@@ -11,22 +11,25 @@ import android.graphics.Rect;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 
+import com.example.bloodsoul.normalflowingview.flowview.ThirdCircle;
+import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
+import com.example.bloodsoul.normalflowingview.flowview.base.IBaseHolder;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 浮动的圆形小球具体的绘制 这个是浮动效果的核心类
- *
- * TODO 浮动效果优化：现在的效果是在一条直线上来回运动，需要优化成在一定范围内运动，在边界弹向其它方向
- * H5效果类似 http://blog.csdn.net/chen_gong1992/article/details/53313383
- * 读者可以将js关键代码翻译成java
- * @author sheng
- */
 public class CircleHolder implements IBaseHolder {
+
+    private static final int textSize = 40;
+
     /**
      * 初始圆心坐标 偏移距离
      */
     private final float cx, cy, dx, dy;
+    /**
+     * 当前偏移百分比
+     */
+    private float curPercent = 0f;
     /**
      * 颜色
      */
@@ -35,13 +38,15 @@ public class CircleHolder implements IBaseHolder {
      * 圆的移动是增长还是缩减
      */
     private boolean isGrowing = true;
-    private float curPercent = 0f;
     /**
      * 速度
      */
     private final float percentSpeed;
-    private String name     = "虚位以待";
-    private int    textSize = 40;
+    /**
+     * 大圆中心文字
+     */
+    private String name = "虚位以待";
+
     private Rect rect;
 
     public float curCX,curCY,radius;
@@ -62,7 +67,10 @@ public class CircleHolder implements IBaseHolder {
      * 小圆运动速率
      */
     private final float smallPercentSpeed;
-    public float curSmallCX,curSmallCY,smallRadius;
+
+    public float curSmallCX,curSmallCY;
+
+    private float smallRadius;
     /**
      * 当前是否是大圆
      */
@@ -83,13 +91,14 @@ public class CircleHolder implements IBaseHolder {
     /**
      * 缓存的卫星对象
      */
-    private List<ThirdCircle> thirdCircles;
+    private List<ThirdCircle> thirdCircles = new ArrayList<>();
 
     private boolean isAnim = false;
 
     private boolean isStop = true;
 
     private CircleHolder circleHolder;
+
     private CircleHolder(Builder builder){
         this.cx = builder.cx;
         this.cy = builder.cy;
@@ -112,7 +121,6 @@ public class CircleHolder implements IBaseHolder {
         this.smallRect = new Rect();
         this.thirdRect = new Rect();
         this.angle = builder.angle;
-        this.thirdCircles = builder.thirdCircles;
 
         circleHolder = this;
     }
@@ -159,7 +167,7 @@ public class CircleHolder implements IBaseHolder {
             canvas.drawText(name, curCX - rect.width() / 2, curCY + rect.height() / 2, paint);
         }
         else {
-            if (null == thirdCircles) {
+            if (thirdCircles == null) {
                 return;
             }
 
@@ -240,7 +248,6 @@ public class CircleHolder implements IBaseHolder {
         private int    color;
         private float  percentSpeed;
         private String name;
-
         private float rate;
         private int smallColor;
         /**
@@ -249,7 +256,6 @@ public class CircleHolder implements IBaseHolder {
         private float translateX;
         private float translateY;
         private int angle;
-        private List<ThirdCircle> thirdCircles = new ArrayList<>();
 
         public Builder setCx(float cx) {
             this.cx = cx;
@@ -301,11 +307,6 @@ public class CircleHolder implements IBaseHolder {
             return this;
         }
 
-        public Builder addThirdCircle(ThirdCircle circle) {
-            thirdCircles.add(circle);
-            return this;
-        }
-
         public Builder setThirdCircleAngle(int angle) {
             this.angle=angle;
             return this;
@@ -339,10 +340,6 @@ public class CircleHolder implements IBaseHolder {
 
     public boolean isNowBigCircle(){
         return isNowBigCircle;
-    }
-
-    public List<ThirdCircle> getThirdCircles() {
-        return thirdCircles;
     }
 
     /**
@@ -394,7 +391,7 @@ public class CircleHolder implements IBaseHolder {
     }
 
     private void thirdSweepAnimStart(final ThirdCircle circle){
-        if (null==thirdCircles) {
+        if (thirdCircles == null) {
             return;
         }
         ValueAnimator animator = ValueAnimator.ofFloat(0, circle.getXieLine());

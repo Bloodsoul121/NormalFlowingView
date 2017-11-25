@@ -12,6 +12,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.animation.AnimationUtils;
 
+import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
+
 /**
  * 提取公共代码封装的Drawer容器
  * @author sheng
@@ -26,34 +28,28 @@ public class ContainerView
 
     private BaseDrawer mDrawer;
 
-    private BaseDrawer preDrawer, curDrawer;
-
     private float curDrawerAlpha = 0.5f;
 
     private int mWidth, mHeight;
 
     public ContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
+    private void init() {
         curDrawerAlpha = 0f;
         mDrawThread = new DrawThread();
-        final SurfaceHolder surfaceHolder = getHolder();
+        SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
+        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT); // 背景半透明
         setZOrderOnTop(true); // 置于顶层
-        getHolder().setFormat(PixelFormat.TRANSLUCENT); // 背景半透明
     }
 
-    /**
-     * 暂停绘制
-     */
     public void setDrawerStop(boolean stop) {
         mDrawer.setStop(stop);
     }
 
-    // 开启线程, 绘制
     public void start(){
         mDrawThread.start();
     }
@@ -62,23 +58,31 @@ public class ContainerView
         if (drawer == null) {
             return;
         }
-        if (drawer != curDrawer) {
+        if (mDrawer != drawer) {
             initDrawer(drawer);
         }
     }
 
-    private void initDrawer(BaseDrawer baseDrawer) {
-        if (baseDrawer == null) {
-            return;
-        }
+    private void initDrawer(BaseDrawer drawer) {
         curDrawerAlpha = 0f;
-        if (this.curDrawer != null) {
-            this.preDrawer = curDrawer;
-        }
-        this.curDrawer = baseDrawer;
-        mDrawer = curDrawer;
+        mDrawer = drawer;
         updateDrawerSize(getWidth(), getHeight());
         invalidate();
+    }
+
+    public void updateDrawerSize(int w, int h) {
+        if (w == 0 || h == 0) {
+            return;
+        }
+        // 必须加锁，因为在DrawThread.drawSurface的时候调用的是各种Drawer的绘制方法
+        // 绘制的时候会遍历内部的各种holder
+        if (this.mDrawer != null) {
+            synchronized (mDrawer) {
+                if (this.mDrawer != null) {
+                    mDrawer.setSize(w, h);
+                }
+            }
+        }
     }
 
     @Override
@@ -89,64 +93,7 @@ public class ContainerView
         mHeight = h;
     }
 
-    public void updateDrawerSize(int w, int h) {
-        if (w == 0 || h == 0) {
-            return;
-        }
-        // 必须加锁，因为在DrawThread.drawSurface的时候调用的是各种Drawer的绘制方法
-        // 绘制的时候会遍历内部的各种holder
-        if (this.curDrawer != null) {
-            synchronized (curDrawer) {
-                if (this.curDrawer != null) {
-                    curDrawer.setSize(w, h);
-                }
-            }
-        }
-
-        Log.i("bloodsoul", "this.preDrawer == null --> " + (this.preDrawer == null));
-        if (this.preDrawer != null) {
-            synchronized (preDrawer) {
-                if (this.preDrawer != null) {
-                    preDrawer.setSize(w, h);
-                }
-            }
-        }
-
-    }
-
-    private boolean drawSurface(Canvas canvas) {
-        final int w = mWidth;
-        final int h = mHeight;
-        if (w == 0 || h == 0) {
-            return true;
-        }
-        boolean needDrawNextFrame = false;
-        if (curDrawer != null) {
-            curDrawer.setSize(w, h);
-            needDrawNextFrame = curDrawer.draw(canvas, curDrawerAlpha);
-            Log.i("bloodsoul", "curDrawerAlpha 111 --> " + curDrawerAlpha);
-        }
-
-        Log.i("bloodsoul", "this.preDrawer == null --> " + (this.preDrawer == null));
-        if (preDrawer != null && curDrawerAlpha < 1f) {
-            needDrawNextFrame = true;
-            preDrawer.setSize(w, h);
-            preDrawer.draw(canvas, 1f - curDrawerAlpha);
-            Log.i("bloodsoul", "curDrawerAlpha 222 --> " + curDrawerAlpha);
-        }
-        if (curDrawerAlpha < 1f) {
-            curDrawerAlpha += 0.04f;
-
-            if (curDrawerAlpha > 1) {
-                curDrawerAlpha = 1f;
-                preDrawer = null;
-            }
-        }
-        return needDrawNextFrame;
-    }
-
     public void onResume() {
-        // Let the drawing thread resume running.
         synchronized (mDrawThread) {
             mDrawThread.mRunning = true;
             mDrawThread.notify();
@@ -155,7 +102,6 @@ public class ContainerView
     }
 
     public void onPause() {
-        // Make sure the drawing thread is not running while we are paused.
         synchronized (mDrawThread) {
             mDrawThread.mRunning = false;
             mDrawThread.notify();
@@ -164,7 +110,6 @@ public class ContainerView
     }
 
     public void onDestroy() {
-        // Make sure the drawing thread goes away.
         synchronized (mDrawThread) {
             mDrawThread.mQuit = true;
             mDrawThread.notify();
@@ -181,12 +126,10 @@ public class ContainerView
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // Tell the drawing thread that a surface is available.
         synchronized (mDrawThread) {
             mDrawThread.mSurface = holder;
             mDrawThread.notify();
         }
-
         Log.i(TAG, "surfaceCreated");
     }
 
@@ -195,8 +138,6 @@ public class ContainerView
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // We need to tell the drawing thread to stop, and block until
-        // it has done so.
         synchronized (mDrawThread) {
             mDrawThread.mSurface = holder;
             mDrawThread.notify();
@@ -213,9 +154,7 @@ public class ContainerView
     }
 
     private class DrawThread extends Thread {
-        /**
-         * These are protected by the Thread's lock.
-         */
+
         SurfaceHolder mSurface;
         boolean       mRunning;
         boolean       mActive;
@@ -224,11 +163,6 @@ public class ContainerView
         @Override
         public void run() {
             while (true) {
-                // Log.i(TAG, "DrawThread run..");
-                // Synchronize with activity: block until the activity is ready
-                // and we have a surface; report whether we are active or
-                // inactive
-                // at this point; exit thread when asked to quit.
                 synchronized (this) {
                     while (mSurface == null || !mRunning) {
                         if (mActive) {
@@ -241,6 +175,7 @@ public class ContainerView
                         try {
                             wait();
                         } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -248,6 +183,7 @@ public class ContainerView
                         mActive = true;
                         notify();
                     }
+
                     final long startTime = AnimationUtils.currentAnimationTimeMillis();
                     // Lock the canvas for drawing.
                     Canvas canvas = mSurface.lockCanvas();
@@ -261,6 +197,7 @@ public class ContainerView
                     } else {
                         Log.i(TAG, "Failure locking canvas");
                     }
+
                     final long drawTime = AnimationUtils.currentAnimationTimeMillis() - startTime;
                     final long needSleepTime = 16 - drawTime;
                     if (needSleepTime > 0) {
@@ -274,10 +211,28 @@ public class ContainerView
                 }
             }
         }
+
     }
 
-    public BaseDrawer getDrawer(){
-        return mDrawer;
+    private void drawSurface(Canvas canvas) {
+        final int w = mWidth;
+        final int h = mHeight;
+        if (w == 0 || h == 0) {
+            return;
+        }
+        if (mDrawer != null) {
+            mDrawer.setSize(w, h);
+            mDrawer.draw(canvas, curDrawerAlpha);
+            Log.i("bloodsoul", "curDrawerAlpha 111 --> " + curDrawerAlpha);
+        }
+
+        if (curDrawerAlpha < 1f) {
+            curDrawerAlpha += 0.04f;
+
+            if (curDrawerAlpha > 1) {
+                curDrawerAlpha = 1f;
+            }
+        }
     }
 
 }

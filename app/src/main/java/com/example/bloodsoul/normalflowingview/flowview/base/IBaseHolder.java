@@ -1,4 +1,4 @@
-package com.example.bloodsoul.normalflowingview.flowview;
+package com.example.bloodsoul.normalflowingview.flowview.base;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
