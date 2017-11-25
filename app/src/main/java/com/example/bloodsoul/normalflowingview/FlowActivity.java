@@ -28,7 +28,6 @@ public class FlowActivity extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                containerView.startDrawer();
                 containerView.start();
             }
         }, 100);

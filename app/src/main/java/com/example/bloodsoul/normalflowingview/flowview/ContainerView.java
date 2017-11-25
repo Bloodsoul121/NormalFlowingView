@@ -23,6 +23,8 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
     private int mWidth, mHeight;
 
+    private boolean isStartThread;
+
     public ContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -46,6 +48,11 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void start(){
+        if (isStartThread) {
+            return;
+        }
+        isStartThread = true;
+        startDrawer();
         mDrawThread.start();
     }
 
