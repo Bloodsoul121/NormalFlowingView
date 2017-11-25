@@ -127,7 +127,10 @@ public class FloatingDrawer extends BaseDrawer {
                             int distanceZ = (int) Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
                             //如果点击位置与圆心的距离大于圆的半径，证明点击位置没有在圆内
                             if (distanceZ <= holder.radius) {
-                                holder.circleClick(!holder.isNormal());
+                                boolean isClick = holder.circleClick(!holder.isNormal());
+                                if (isClick && mOnItemClickListener != null) {
+                                    mOnItemClickListener.onItemClick(holder.getName());
+                                }
                             }
                         }
                     }

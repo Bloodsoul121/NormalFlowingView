@@ -226,4 +226,8 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    public void setOnItemClickListener(BaseDrawer.OnItemClickListener listener) {
+        mDrawer.setOnItemClickListener(listener);
+    }
+
 }

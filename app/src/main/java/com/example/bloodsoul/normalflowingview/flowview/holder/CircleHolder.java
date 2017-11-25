@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.animation.AccelerateInterpolator;
@@ -23,15 +24,13 @@ public class CircleHolder implements IBaseHolder {
 
     public float radius;
 
-    public float animatorRadius = 0;
+    private float animatorRadius = 0;
 
     private float curPercent = 0f;
 
     private float percentSpeed;
 
-    private int textSize = 40;
-
-    private int color;
+    private int normalColor;
 
     private int selectColor;
 
@@ -47,7 +46,13 @@ public class CircleHolder implements IBaseHolder {
 
     private Rect rect;
 
+    private float rectWidth, rectHeight;
+
+    private float animatorRectWidth, animatorRectHeight;
+
     private CircleHolder circleHolder;
+
+    private LinearGradient mLinearGradient;
 
     private CircleHolder(Builder builder){
         this.cx = builder.cx;
@@ -56,7 +61,7 @@ public class CircleHolder implements IBaseHolder {
         this.dy = builder.dy;
         this.radius = builder.radius;
         this.percentSpeed = builder.percentSpeed;
-        this.color = builder.color;
+        this.normalColor = builder.color;
         this.name = builder.name;
         this.rect = new Rect();
         this.selectColor = builder.selectColor;
@@ -95,23 +100,34 @@ public class CircleHolder implements IBaseHolder {
         canvas.drawCircle(curCX, curCY, radius+1, paint);
         paint.setStyle(Paint.Style.FILL);
         paint.setPathEffect(null);
-        paint.setColor(color);
+        paint.setColor(normalColor);
+
+//        mLinearGradient = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
+//                curCY + radius, new int[]{Color.BLUE, Color.RED}, null,
+//                Shader.TileMode.CLAMP);
+//        paint.setShader(mLinearGradient);
+
         canvas.drawCircle(curCX, curCY, radius, paint);
 
+        paint.setTextSize(40);
+        paint.getTextBounds(name, 0, name.length(), rect);
+        rectWidth = rect.width() / 2;
+        rectHeight = rect.height() / 2;
+        animatorRectWidth = rectWidth;
+        animatorRectHeight = rectHeight;
+
         if (isNormal) {
-            paint.setTextSize(textSize);
-            paint.getTextBounds(name, 0, name.length(), rect);
             paint.setColor(selectColor);
-            canvas.drawText(name, curCX - rect.width() / 2, curCY + rect.height() / 2, paint);
+            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
+
+            paint.setColor(selectColor);
+            canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
         } else {
             paint.setColor(selectColor);
-            paint.setStyle(Paint.Style.FILL);
-
-            paint.setColor(selectColor);
-            canvas.drawCircle(curCX, curCY, radius, paint);
+            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
 
             paint.setColor(Color.WHITE);
-            canvas.drawText(name, curCX - rect.width() / 2, curCY + rect.height() / 2, paint);
+            canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
         }
     }
 
@@ -120,23 +136,25 @@ public class CircleHolder implements IBaseHolder {
         isStop = flag;
     }
 
-    public void circleClick(boolean flag){
+    public boolean circleClick(boolean flag){
         if (isAnim) {
-            return;
+            return false;
         }
         isNormal = flag;
         animClick();
+        return true;
     }
 
     public boolean isNormal(){
-        return isNormal;
+        return this.isNormal;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     private void animClick(){
-        final float         ra         = radius;
-        final int           startColor = circleHolder.color;
-        final int           endColor   = selectColor;
-        ValueAnimator       animator   = ValueAnimator.ofFloat(0, 1);
+        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
         animator.setDuration(300);
         animator.setInterpolator(new AccelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -144,11 +162,13 @@ public class CircleHolder implements IBaseHolder {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float rate = (float) animation.getAnimatedValue();
                 if (isNormal) {
-                    circleHolder.radius = rate * ra;
-                    circleHolder.color = startColor;
+                    circleHolder.animatorRadius = (1 - rate) * radius;
+                    animatorRectWidth = (1 - rate) * rectWidth;
+                    animatorRectHeight = (1 - rate) * rectHeight;
                 } else {
-                    circleHolder.radius = rate * ra;
-                    circleHolder.selectColor = endColor;
+                    circleHolder.animatorRadius = rate * radius;
+                    animatorRectWidth = rate * rectWidth;
+                    animatorRectHeight = rate * rectHeight;
                 }
             }
         });

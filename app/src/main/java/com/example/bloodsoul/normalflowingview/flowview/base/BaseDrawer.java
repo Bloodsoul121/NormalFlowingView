@@ -19,6 +19,8 @@ public abstract class BaseDrawer {
 
 	private GradientDrawable gradientDrawable;
 
+	protected OnItemClickListener mOnItemClickListener;
+
 	public BaseDrawer() {
 		this.holders = new ArrayList<>();
 		this.paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -88,4 +90,11 @@ public abstract class BaseDrawer {
 
 	public abstract void onTouch(MotionEvent event);
 
+	public interface OnItemClickListener{
+		void onItemClick(String childTitle);
+	}
+
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		this.mOnItemClickListener = listener;
+	}
 }

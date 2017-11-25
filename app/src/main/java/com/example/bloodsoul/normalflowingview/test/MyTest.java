@@ -14,6 +14,8 @@ public class MyTest extends ApplicationTestCase {
 //        System.out.println(num);
 //        float num2 = BaseDrawer.getDownRandFloat(4, 10);
 //        System.out.println(num2);
+
+        System.out.println("" + Math.sqrt(4f));
     }
 
     /**

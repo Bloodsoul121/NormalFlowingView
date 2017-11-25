@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.bloodsoul.normalflowingview.flowview.ContainerView;
 import com.example.bloodsoul.normalflowingview.flowview.FloatingDrawer;
+import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
 
 public class FlowActivity extends AppCompatActivity {
 
@@ -18,7 +19,15 @@ public class FlowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flow);
         containerView = (ContainerView) findViewById(R.id.floatingView);
-        containerView.setDrawer(new FloatingDrawer());
+        FloatingDrawer drawer = new FloatingDrawer();
+        containerView.setDrawer(drawer);
+
+        drawer.setOnItemClickListener(new BaseDrawer.OnItemClickListener() {
+            @Override
+            public void onItemClick(String childTitle) {
+//                Toast.makeText(FlowActivity.this, childTitle, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
