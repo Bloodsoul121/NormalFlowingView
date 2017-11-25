@@ -16,7 +16,6 @@ import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
 
 /**
  * 提取公共代码封装的Drawer容器
- * @author sheng
  */
 public class ContainerView
         extends SurfaceView
@@ -223,7 +222,6 @@ public class ContainerView
         if (mDrawer != null) {
             mDrawer.setSize(w, h);
             mDrawer.draw(canvas, curDrawerAlpha);
-            Log.i("bloodsoul", "curDrawerAlpha 111 --> " + curDrawerAlpha);
         }
 
         if (curDrawerAlpha < 1f) {

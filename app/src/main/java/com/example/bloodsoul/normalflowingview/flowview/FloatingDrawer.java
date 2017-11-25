@@ -39,11 +39,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.0019f)
                     .setColor(Color.parseColor("#FFE2FFF8"))
                     .setName("情感星座")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FF59DABC"))
-                    .setTranslateX(-20f)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(135)
+                    .setSelectColor(Color.parseColor("#FF59DABC"))
                     .build());
             addHolder(new CircleHolder.Builder()
                     .setCx(0.75f * width)
@@ -54,11 +50,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.0017f)
                     .setColor(Color.parseColor("#FFECFCF3"))
                     .setName("科技数码")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FF8BEAB4"))
-                    .setTranslateX(0)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(160)
+                    .setSelectColor(Color.parseColor("#FF8BEAB4"))
                     .build());
             addHolder(new CircleHolder.Builder()
                     .setCx(0.25f * width)
@@ -69,11 +61,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.002f)
                     .setColor(Color.parseColor("#FFFAF6EE"))
                     .setName("体育赛事")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FFFACD74"))
-                    .setTranslateX(0)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(60)
+                    .setSelectColor(Color.parseColor("#FFFACD74"))
                     .build());
             addHolder(new CircleHolder.Builder()
                     .setCx(0.68f * width)
@@ -84,11 +72,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.0025f)
                     .setColor(Color.parseColor("#FFFDF8F8"))
                     .setName("生活休闲")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FFFFB0B0"))
-                    .setTranslateX(0)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(270)
+                    .setSelectColor(Color.parseColor("#FFFFB0B0"))
                     .build());
             addHolder(new CircleHolder.Builder()
                     .setCx(0.42f * width)
@@ -99,11 +83,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.0020f)
                     .setColor(Color.parseColor("#FFE7F7FA"))
                     .setName("育儿护理")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FF6BDEF5"))
-                    .setTranslateX(0)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(0)
+                    .setSelectColor(Color.parseColor("#FF6BDEF5"))
                     .build());
             addHolder(new CircleHolder.Builder()
                     .setCx(0.57f * width)
@@ -114,11 +94,7 @@ public class FloatingDrawer
                     .setPercentSpeed(0.00185f)
                     .setColor(Color.parseColor("#FFF3E2F7"))
                     .setName("时政资讯")
-                    .setRate(0.7f)
-                    .setSmallColor(Color.parseColor("#FFCA61E4"))
-                    .setTranslateX(0)
-                    .setTranslateY(50f)
-                    .setThirdCircleAngle(100)
+                    .setSelectColor(Color.parseColor("#FFCA61E4"))
                     .build());
         }
     }
@@ -150,14 +126,14 @@ public class FloatingDrawer
                         if (hold instanceof CircleHolder) {
                             CircleHolder holder = ((CircleHolder) hold);
                             //点击位置x坐标与圆心的x坐标的距离
-                            int distanceX = (int) Math.abs(holder.isNowBigCircle() ? holder.curCX - downX : holder.curSmallCX - downX);
+                            int distanceX = (int) Math.abs(holder.curCX - downX);
                             //点击位置y坐标与圆心的y坐标的距离
-                            int distanceY = (int) Math.abs(holder.isNowBigCircle() ? holder.curCY - downY : holder.curSmallCY - downY);
+                            int distanceY = (int) Math.abs(holder.curCY - downY);
                             //点击位置与圆心的直线距离
                             int distanceZ = (int) Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
                             //如果点击位置与圆心的距离大于圆的半径，证明点击位置没有在圆内
-                            if (distanceZ <= (holder.isNowBigCircle() ? holder.radius : holder.radius * holder.rate)) {
-                                holder.circleClick(!holder.isNowBigCircle());
+                            if (distanceZ <= holder.radius) {
+                                holder.circleClick(!holder.isNormal());
                             }
                         }
                     }
