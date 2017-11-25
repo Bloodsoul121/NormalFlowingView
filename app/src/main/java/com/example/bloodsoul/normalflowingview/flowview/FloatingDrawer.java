@@ -8,13 +8,7 @@ import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
 import com.example.bloodsoul.normalflowingview.flowview.base.IBaseHolder;
 import com.example.bloodsoul.normalflowingview.flowview.holder.CircleHolder;
 
-/**
- * 添加浮动的小"组件" 处理点击事件
- *
- */
-public class FloatingDrawer
-        extends BaseDrawer
-{
+public class FloatingDrawer extends BaseDrawer {
 
     private long currentMS;
     private float downX;

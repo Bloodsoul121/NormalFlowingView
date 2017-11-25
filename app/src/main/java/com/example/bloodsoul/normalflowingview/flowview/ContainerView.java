@@ -14,12 +14,7 @@ import android.view.animation.AnimationUtils;
 
 import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
 
-/**
- * 提取公共代码封装的Drawer容器
- */
-public class ContainerView
-        extends SurfaceView
-        implements SurfaceHolder.Callback {
+public class ContainerView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = "ContainerView";
 
@@ -73,8 +68,6 @@ public class ContainerView
         if (w == 0 || h == 0) {
             return;
         }
-        // 必须加锁，因为在DrawThread.drawSurface的时候调用的是各种Drawer的绘制方法
-        // 绘制的时候会遍历内部的各种holder
         if (this.mDrawer != null) {
             synchronized (mDrawer) {
                 if (this.mDrawer != null) {
@@ -97,7 +90,6 @@ public class ContainerView
             mDrawThread.mRunning = true;
             mDrawThread.notify();
         }
-        Log.i(TAG, "onResume");
     }
 
     public void onPause() {
@@ -105,7 +97,6 @@ public class ContainerView
             mDrawThread.mRunning = false;
             mDrawThread.notify();
         }
-        Log.i(TAG, "onPause");
     }
 
     public void onDestroy() {
@@ -113,13 +104,11 @@ public class ContainerView
             mDrawThread.mQuit = true;
             mDrawThread.notify();
         }
-        Log.i(TAG, "onDestroy");
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         mDrawer.onTouch(e);
-        //继续执行后面的代码
         return super.onTouchEvent(e);
     }
 
@@ -129,7 +118,6 @@ public class ContainerView
             mDrawThread.mSurface = holder;
             mDrawThread.notify();
         }
-        Log.i(TAG, "surfaceCreated");
     }
 
     @Override
@@ -149,7 +137,6 @@ public class ContainerView
             }
         }
         holder.removeCallback(this);
-        Log.i(TAG, "surfaceDestroyed");
     }
 
     private class DrawThread extends Thread {

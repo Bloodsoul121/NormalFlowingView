@@ -7,9 +7,6 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
-/**
- * 抽象的基础绘制类 需要定制浮动的图像
- */
 public abstract class BaseDrawer {
 
 	private int width;

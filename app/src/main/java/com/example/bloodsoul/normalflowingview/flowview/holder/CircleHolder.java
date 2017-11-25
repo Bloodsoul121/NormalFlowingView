@@ -15,8 +15,6 @@ import com.example.bloodsoul.normalflowingview.flowview.base.IBaseHolder;
 
 public class CircleHolder implements IBaseHolder {
 
-    private static final int textSize = 40;
-
     private float cx, cy;
 
     private float dx, dy;
@@ -28,6 +26,8 @@ public class CircleHolder implements IBaseHolder {
     private float curPercent = 0f;
 
     private float percentSpeed;
+
+    private int textSize = 40;
 
     private int color;
 
@@ -130,9 +130,6 @@ public class CircleHolder implements IBaseHolder {
         return isNormal;
     }
 
-    /**
-     * 点击之后的动画效果 isNormal ＝ false 大圆缩小->小圆 isNormal = true 小圆扩散->大圆 中间配上颜色的渐变
-     */
     private void animClick(){
         final float         ra         = radius;
         final int           startColor = circleHolder.color;
@@ -167,9 +164,6 @@ public class CircleHolder implements IBaseHolder {
         animator.start();
     }
 
-    /**
-     * 构建者模式 设定相关属性
-     */
     public static class Builder{
 
         private float cx, cy;
