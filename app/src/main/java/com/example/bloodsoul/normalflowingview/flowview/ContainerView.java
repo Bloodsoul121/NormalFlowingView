@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,8 +14,6 @@ import android.view.animation.AnimationUtils;
 import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
 
 public class ContainerView extends SurfaceView implements SurfaceHolder.Callback {
-
-    private static final String TAG = "ContainerView";
 
     private DrawThread mDrawThread;
 
@@ -36,12 +33,16 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
         mDrawThread = new DrawThread();
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
-        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT); // 背景半透明
-        setZOrderOnTop(true); // 置于顶层
+        surfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
+        setZOrderOnTop(true);
     }
 
-    public void setDrawerStop(boolean stop) {
-        mDrawer.setStop(stop);
+    public void startDrawer() {
+        mDrawer.setStop(false);
+    }
+
+    public void endDrawer() {
+        mDrawer.setStop(true);
     }
 
     public void start(){
@@ -77,14 +78,6 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        updateDrawerSize(w, h);
-        mWidth = w;
-        mHeight = h;
-    }
-
     public void onResume() {
         synchronized (mDrawThread) {
             mDrawThread.mRunning = true;
@@ -104,6 +97,14 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
             mDrawThread.mQuit = true;
             mDrawThread.notify();
         }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        updateDrawerSize(w, h);
+        mWidth = w;
+        mHeight = h;
     }
 
     @Override
@@ -180,8 +181,6 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
                         drawSurface(canvas);
                         // All done!
                         mSurface.unlockCanvasAndPost(canvas);
-                    } else {
-                        Log.i(TAG, "Failure locking canvas");
                     }
 
                     final long drawTime = AnimationUtils.currentAnimationTimeMillis() - startTime;

@@ -21,7 +21,6 @@ import android.view.animation.Interpolator;
 
 /**
  *  修改VALUES值 达到慢进慢出的动画效果
- *  @author sheng
  */
 public class SlowInSlowOutInterpolator implements Interpolator {
 

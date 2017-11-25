@@ -3,10 +3,6 @@ package com.example.bloodsoul.normalflowingview.sweepview;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-/**
- * @author sheng
- */
-
 public abstract class BaseSplashDrawer {
     public static final float START_RADIUS = 20;
 

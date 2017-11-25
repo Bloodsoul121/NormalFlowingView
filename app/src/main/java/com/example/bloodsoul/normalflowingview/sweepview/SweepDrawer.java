@@ -12,7 +12,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 /**
  * 绘制小圆的扩散动画
- * @author sheng
  */
 public class SweepDrawer extends BaseSplashDrawer {
     private Point[]       mCircles;

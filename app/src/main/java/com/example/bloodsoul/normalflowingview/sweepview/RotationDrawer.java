@@ -11,7 +11,6 @@ import android.view.View;
 
 /**
  * 绘制小圆的旋转动画
- * @author sheng
  */
 public class RotationDrawer extends BaseSplashDrawer {
     private int[]         mCircleColors;

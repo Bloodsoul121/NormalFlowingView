@@ -7,9 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.bloodsoul.normalflowingview.flowview.ContainerView;
 import com.example.bloodsoul.normalflowingview.flowview.FloatingDrawer;
 
-public class FlowActivity
-        extends AppCompatActivity
-{
+public class FlowActivity extends AppCompatActivity {
 
     private ContainerView containerView;
 
@@ -30,7 +28,7 @@ public class FlowActivity
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                containerView.setDrawerStop(false);
+                containerView.startDrawer();
                 containerView.start();
             }
         }, 100);
@@ -40,7 +38,7 @@ public class FlowActivity
     protected void onPause() {
         super.onPause();
         containerView.onPause();
-        containerView.setDrawerStop(true);
+        containerView.endDrawer();
     }
 
     @Override

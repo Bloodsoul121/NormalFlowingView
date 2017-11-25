@@ -13,9 +13,7 @@ import com.example.bloodsoul.normalflowingview.sweepview.IOnAnimEndListener;
 import com.example.bloodsoul.normalflowingview.sweepview.RotationSweepView;
 
 
-public class SweepActivity
-        extends AppCompatActivity
-{
+public class SweepActivity extends AppCompatActivity {
 
     private RotationSweepView rotationView;
 

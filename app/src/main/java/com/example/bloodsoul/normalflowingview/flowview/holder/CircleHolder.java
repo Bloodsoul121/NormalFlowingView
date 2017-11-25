@@ -23,6 +23,8 @@ public class CircleHolder implements IBaseHolder {
 
     public float radius;
 
+    public float animatorRadius = 0;
+
     private float curPercent = 0f;
 
     private float percentSpeed;

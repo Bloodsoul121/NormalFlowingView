@@ -4,16 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
-import com.example.bloodsoul.normalflowingview.flowview.ContainerView;
-
-public class MainActivity
-        extends AppCompatActivity
-{
-
-    private ContainerView containerView;
-    private Button        mBtn;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

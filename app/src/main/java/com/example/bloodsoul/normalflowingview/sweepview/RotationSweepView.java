@@ -8,10 +8,6 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * @author sheng
- */
-
 public class RotationSweepView extends View {
     private Paint            mPaint;
     private RotationDrawer   rotationDrawer;

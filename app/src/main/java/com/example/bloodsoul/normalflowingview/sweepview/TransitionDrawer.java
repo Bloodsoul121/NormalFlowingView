@@ -11,7 +11,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 /**
  * 绘制实体圆过渡SurfaceView中的圆
- * @author sheng
  */
 public class TransitionDrawer extends BaseSplashDrawer {
     private SweepDrawer.Point[] mCircles;
