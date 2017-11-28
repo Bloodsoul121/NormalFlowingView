@@ -26,6 +26,11 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
     private boolean isStartThread;
 
+    public ContainerView(Context context) {
+        super(context);
+        init();
+    }
+
     public ContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -49,12 +54,11 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void start(){
-        if (isStartThread) {
-            return;
+        startDrawer();
+        if (!isStartThread) {
+            mDrawThread.start();
         }
         isStartThread = true;
-        startDrawer();
-        mDrawThread.start();
     }
 
     public void setDrawer(BaseDrawer drawer) {
@@ -88,24 +92,15 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void onResume() {
-        synchronized (mDrawThread) {
-            mDrawThread.mRunning = true;
-            mDrawThread.notify();
-        }
+        mDrawThread.mRunning = true;
     }
 
     public void onPause() {
-        synchronized (mDrawThread) {
-            mDrawThread.mRunning = false;
-            mDrawThread.notify();
-        }
+        mDrawThread.mRunning = false;
     }
 
     public void onDestroy() {
-        synchronized (mDrawThread) {
-            mDrawThread.mQuit = true;
-            mDrawThread.notify();
-        }
+        mDrawThread.mQuit = true;
     }
 
     @Override

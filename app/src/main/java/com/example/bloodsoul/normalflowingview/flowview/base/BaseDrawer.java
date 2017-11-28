@@ -1,6 +1,7 @@
 package com.example.bloodsoul.normalflowingview.flowview.base;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.view.MotionEvent;

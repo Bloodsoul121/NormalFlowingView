@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -103,18 +102,23 @@ public class CircleHolder implements IBaseHolder {
 
         paint.setColor(normalColorEnd);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(new DashPathEffect(new float[]{2, 2}, 0));
         paint.setStrokeWidth(1);
-        canvas.drawCircle(curCX, curCY, radius+1, paint);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setPathEffect(null);
-        paint.setColor(normalColorStart);
+        canvas.drawCircle(curCX, curCY, radius + 1, paint);
 
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
         mLinearGradientNormal = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
                 curCY + radius, new int[]{normalColorStart, normalColorEnd}, null,
                 Shader.TileMode.CLAMP);
         paint.setShader(mLinearGradientNormal);
         canvas.drawCircle(curCX, curCY, radius, paint);
+
+        paint.setColor(Color.WHITE);
+        mLinearGradientSelect = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
+                curCY + radius, new int[]{selectColorStart, selectColorEnd}, null,
+                Shader.TileMode.CLAMP);
+        paint.setShader(mLinearGradientSelect);
+        canvas.drawCircle(curCX, curCY, animatorRadius, paint);
 
         paint.setTextSize(40);
         paint.getTextBounds(name, 0, name.length(), rect);
@@ -122,23 +126,9 @@ public class CircleHolder implements IBaseHolder {
         rectHeight = rect.height() / 2;
         animatorRectWidth = rectWidth;
         animatorRectHeight = rectHeight;
-
-        mLinearGradientSelect = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
-                curCY + radius, new int[]{selectColorStart, selectColorEnd}, null,
-                Shader.TileMode.CLAMP);
-        paint.setShader(mLinearGradientSelect);
-
-        if (isNormal) {
-            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
-            paint.setShader(null);
-            paint.setColor(textColor);
-            canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
-        } else {
-            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
-            paint.setShader(null);
-            paint.setColor(Color.WHITE);
-            canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
-        }
+        paint.setShader(null);
+        paint.setColor(isNormal ? textColor : Color.WHITE);
+        canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
     }
 
     @Override
