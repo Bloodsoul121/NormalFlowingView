@@ -91,7 +91,7 @@ public abstract class BaseDrawer {
 	public abstract void onTouch(MotionEvent event);
 
 	public interface OnItemClickListener{
-		void onItemClick(String childTitle);
+		void onChannelItemClick(String childTitle);
 	}
 
 	public void setOnItemClickListener(OnItemClickListener listener) {

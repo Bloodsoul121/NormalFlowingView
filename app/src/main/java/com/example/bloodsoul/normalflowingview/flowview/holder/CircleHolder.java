@@ -9,6 +9,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.view.animation.AccelerateInterpolator;
 
 import com.example.bloodsoul.normalflowingview.flowview.base.BaseDrawer;
@@ -30,9 +31,11 @@ public class CircleHolder implements IBaseHolder {
 
     private float percentSpeed;
 
-    private int normalColor;
+    private int normalColorStart, normalColorEnd;
 
-    private int selectColor;
+    private int selectColorStart, selectColorEnd;
+
+    private int textColor;
 
     private boolean isGrowing = true;
 
@@ -52,7 +55,9 @@ public class CircleHolder implements IBaseHolder {
 
     private CircleHolder circleHolder;
 
-    private LinearGradient mLinearGradient;
+    private LinearGradient mLinearGradientNormal;
+
+    private LinearGradient mLinearGradientSelect;
 
     private CircleHolder(Builder builder){
         this.cx = builder.cx;
@@ -61,10 +66,13 @@ public class CircleHolder implements IBaseHolder {
         this.dy = builder.dy;
         this.radius = builder.radius;
         this.percentSpeed = builder.percentSpeed;
-        this.normalColor = builder.color;
+        this.normalColorStart = builder.colorStart;
+        this.normalColorEnd = builder.colorEnd;
+        this.selectColorStart = builder.selectColorStart;
+        this.selectColorEnd = builder.selectColorEnd;
+        this.textColor = builder.textColor;
         this.name = builder.name;
         this.rect = new Rect();
-        this.selectColor = builder.selectColor;
         circleHolder = this;
     }
 
@@ -93,20 +101,19 @@ public class CircleHolder implements IBaseHolder {
             curCY = cy + dy * curPercent;
         }
 
-        paint.setColor(selectColor);
+        paint.setColor(normalColorEnd);
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(new DashPathEffect(new float[]{2, 2}, 0));
         paint.setStrokeWidth(1);
         canvas.drawCircle(curCX, curCY, radius+1, paint);
         paint.setStyle(Paint.Style.FILL);
         paint.setPathEffect(null);
-        paint.setColor(normalColor);
+        paint.setColor(normalColorStart);
 
-//        mLinearGradient = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
-//                curCY + radius, new int[]{Color.BLUE, Color.RED}, null,
-//                Shader.TileMode.CLAMP);
-//        paint.setShader(mLinearGradient);
-
+        mLinearGradientNormal = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
+                curCY + radius, new int[]{normalColorStart, normalColorEnd}, null,
+                Shader.TileMode.CLAMP);
+        paint.setShader(mLinearGradientNormal);
         canvas.drawCircle(curCX, curCY, radius, paint);
 
         paint.setTextSize(40);
@@ -116,16 +123,19 @@ public class CircleHolder implements IBaseHolder {
         animatorRectWidth = rectWidth;
         animatorRectHeight = rectHeight;
 
-        if (isNormal) {
-            paint.setColor(selectColor);
-            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
+        mLinearGradientSelect = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
+                curCY + radius, new int[]{selectColorStart, selectColorEnd}, null,
+                Shader.TileMode.CLAMP);
+        paint.setShader(mLinearGradientSelect);
 
-            paint.setColor(selectColor);
+        if (isNormal) {
+            canvas.drawCircle(curCX, curCY, animatorRadius, paint);
+            paint.setShader(null);
+            paint.setColor(textColor);
             canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
         } else {
-            paint.setColor(selectColor);
             canvas.drawCircle(curCX, curCY, animatorRadius, paint);
-
+            paint.setShader(null);
             paint.setColor(Color.WHITE);
             canvas.drawText(name, curCX - animatorRectWidth, curCY + animatorRectHeight, paint);
         }
@@ -191,9 +201,10 @@ public class CircleHolder implements IBaseHolder {
         private float cx, cy;
         private float dx, dy;
         private float radius;
-        private int color;
-        private int selectColor;
         private float percentSpeed;
+        private int textColor;
+        private int colorStart, colorEnd;
+        private int selectColorStart, selectColorEnd;
         private String name;
 
         public Builder setCx(float cx) {
@@ -221,13 +232,28 @@ public class CircleHolder implements IBaseHolder {
             return this;
         }
 
-        public Builder setColor(int color) {
-            this.color = color;
+        public Builder setTextColor(int textColor) {
+            this.textColor = textColor;
             return this;
         }
 
-        public Builder setSelectColor(int color) {
-            this.selectColor = color;
+        public Builder setColorStart(int colorStart) {
+            this.colorStart = colorStart;
+            return this;
+        }
+
+        public Builder setSelectColorStart(int color) {
+            this.selectColorStart = color;
+            return this;
+        }
+
+        public Builder setColorEnd(int colorEnd) {
+            this.colorEnd = colorEnd;
+            return this;
+        }
+
+        public Builder setSelectColorEnd(int selectColorEnd) {
+            this.selectColorEnd = selectColorEnd;
             return this;
         }
 

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -73,6 +74,7 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void updateDrawerSize(int w, int h) {
+        Log.i("ContainerView", "w " + w + ", h " + h);
         if (w == 0 || h == 0) {
             return;
         }

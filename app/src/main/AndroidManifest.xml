@@ -21,6 +21,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".FlowActivity"
+                  android:theme="@style/AppTheme.NoBar"
                   android:screenOrientation="portrait">
         </activity>
     </application>
