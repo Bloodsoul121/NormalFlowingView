@@ -52,8 +52,6 @@ public class CircleHolder implements IBaseHolder {
 
     private float animatorRectWidth, animatorRectHeight;
 
-    private CircleHolder circleHolder;
-
     private LinearGradient mLinearGradientNormal;
 
     private LinearGradient mLinearGradientSelect;
@@ -72,7 +70,6 @@ public class CircleHolder implements IBaseHolder {
         this.textColor = builder.textColor;
         this.name = builder.name;
         this.rect = new Rect();
-        circleHolder = this;
     }
 
     @Override
@@ -100,11 +97,6 @@ public class CircleHolder implements IBaseHolder {
             curCY = cy + dy * curPercent;
         }
 
-        paint.setColor(normalColorEnd);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
-        canvas.drawCircle(curCX, curCY, radius + 1, paint);
-
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
         mLinearGradientNormal = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
@@ -113,7 +105,6 @@ public class CircleHolder implements IBaseHolder {
         paint.setShader(mLinearGradientNormal);
         canvas.drawCircle(curCX, curCY, radius, paint);
 
-        paint.setColor(Color.WHITE);
         mLinearGradientSelect = new LinearGradient(curCX - radius, curCY - radius, curCX + radius,
                 curCY + radius, new int[]{selectColorStart, selectColorEnd}, null,
                 Shader.TileMode.CLAMP);
@@ -162,11 +153,11 @@ public class CircleHolder implements IBaseHolder {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float rate = (float) animation.getAnimatedValue();
                 if (isNormal) {
-                    circleHolder.animatorRadius = (1 - rate) * radius;
+                    animatorRadius = (1 - rate) * radius;
                     animatorRectWidth = (1 - rate) * rectWidth;
                     animatorRectHeight = (1 - rate) * rectHeight;
                 } else {
-                    circleHolder.animatorRadius = rate * radius;
+                    animatorRadius = rate * radius;
                     animatorRectWidth = rate * rectWidth;
                     animatorRectHeight = rate * rectHeight;
                 }

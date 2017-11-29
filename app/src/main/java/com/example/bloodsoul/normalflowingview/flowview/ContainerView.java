@@ -26,6 +26,8 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
     private boolean isStartThread;
 
+    private final Object lock = new Object();
+
     public ContainerView(Context context) {
         super(context);
         init();
@@ -78,29 +80,35 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void updateDrawerSize(int w, int h) {
-        Log.i("ContainerView", "w " + w + ", h " + h);
         if (w == 0 || h == 0) {
             return;
         }
-        if (this.mDrawer != null) {
-            synchronized (mDrawer) {
-                if (this.mDrawer != null) {
-                    mDrawer.setSize(w, h);
-                }
+        synchronized (lock) {
+            if (this.mDrawer != null) {
+                mDrawer.setSize(w, h);
             }
         }
     }
 
     public void onResume() {
         mDrawThread.mRunning = true;
+        synchronized (lock) {
+            lock.notify();
+        }
     }
 
     public void onPause() {
         mDrawThread.mRunning = false;
+        synchronized (lock) {
+            lock.notify();
+        }
     }
 
     public void onDestroy() {
         mDrawThread.mQuit = true;
+        synchronized (lock) {
+            lock.notify();
+        }
     }
 
     @Override
@@ -119,9 +127,10 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        synchronized (mDrawThread) {
+        Log.i("ContainerView", " --> surfaceCreated" + ", " + isStartThread);
+        synchronized (lock) {
             mDrawThread.mSurface = holder;
-            mDrawThread.notify();
+            lock.notify();
         }
     }
 
@@ -130,9 +139,10 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        synchronized (mDrawThread) {
+        Log.i("ContainerView", " --> surfaceDestroyed" + ", " + isStartThread);
+        synchronized (lock) {
             mDrawThread.mSurface = holder;
-            mDrawThread.notify();
+            lock.notify();
             while (mDrawThread.mActive) {
                 try {
                     mDrawThread.wait();
@@ -154,17 +164,17 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
         @Override
         public void run() {
             while (true) {
-                synchronized (this) {
+                synchronized (lock) {
                     while (mSurface == null || !mRunning) {
                         if (mActive) {
                             mActive = false;
-                            notify();
+                            lock.notify();
                         }
                         if (mQuit) {
                             return;
                         }
                         try {
-                            wait();
+                            lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -172,7 +182,7 @@ public class ContainerView extends SurfaceView implements SurfaceHolder.Callback
 
                     if (!mActive) {
                         mActive = true;
-                        notify();
+                        lock.notify();
                     }
 
                     final long startTime = AnimationUtils.currentAnimationTimeMillis();

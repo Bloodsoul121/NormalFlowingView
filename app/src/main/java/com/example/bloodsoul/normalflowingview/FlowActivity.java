@@ -3,6 +3,7 @@ package com.example.bloodsoul.normalflowingview;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -41,14 +42,15 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
         choosedTv.setOnClickListener(this);
         containerView = (ContainerView) findViewById(R.id.floatingView);
         FloatingDrawer drawer = new FloatingDrawer();
-        drawer.setOnItemClickListener(this);
         containerView.setDrawer(drawer);
+        containerView.setOnItemClickListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         containerView.onResume();
+        containerView.startDrawer();
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -61,8 +63,10 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.skip:
+                Log.i("FlowActivity", "skip");
                 break;
             case R.id.choosed:
+                Log.i("FlowActivity", "choosed " + mChannels.toString());
                 break;
         }
     }
@@ -71,10 +75,11 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
     public void onChannelItemClick(String childTitle) {
         Boolean isSelected = mSelects.get(childTitle);
         isSelected = isSelected == null ? false : isSelected;
+        mSelects.put(childTitle, !isSelected);
         if (isSelected) {
-            mChannels.add(childTitle);
-        } else {
             mChannels.remove(childTitle);
+        } else {
+            mChannels.add(childTitle);
         }
     }
 
