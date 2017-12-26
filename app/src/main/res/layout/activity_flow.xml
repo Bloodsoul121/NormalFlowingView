@@ -6,59 +6,60 @@
 
     <TextView
         android:id="@+id/skip"
-        android:textColor="#e6303030"
-        android:textSize="12sp"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginRight="@dimen/custom_interest_skip_margin_right"
+        android:layout_marginTop="@dimen/custom_interest_skip_margin_top"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:text="跳过"
-        android:background="@drawable/news_channel_interest_skip_bg"
         android:gravity="center"
-        android:layout_width="51dp"
-        android:layout_height="27dp"/>
+        android:text="@string/custom_interest_skip_text"
+        android:textColor="@color/custom_interest_skip_text_color"
+        android:textSize="@dimen/custom_interest_skip_text_size"
+        android:background="@drawable/news_channel_interest_skip_bg"
+        android:layout_width="@dimen/custom_interest_skip_width"
+        android:layout_height="@dimen/custom_interest_skip_height"/>
 
     <TextView
         android:id="@+id/big_title"
-        android:text="定制我的个性内容"
-        android:textSize="26sp"
-        android:textColor="#303030"
+        android:layout_marginTop="@dimen/custom_interest_big_title_margin_top"
         android:gravity="center"
-        android:layout_marginTop="61dp"
+        android:text="@string/custom_interest_big_title_text"
+        android:textSize="@dimen/custom_interest_big_title_text_size"
+        android:textColor="@color/custom_interest_big_title_text_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/sub_title"
         android:layout_below="@+id/big_title"
-        android:text="选择感兴趣频道, 呈现更多资讯"
-        android:textSize="17sp"
-        android:textColor="#303030"
+        android:layout_marginTop="@dimen/custom_interest_sub_title_margin_top"
         android:gravity="center"
-        android:layout_marginTop="16dp"
+        android:text="@string/custom_interest_sub_title_text"
+        android:textSize="@dimen/custom_interest_sub_title_text_size"
+        android:textColor="@color/custom_interest_sub_title_text_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <com.example.bloodsoul.normalflowingview.flowview.ContainerView
         android:id="@+id/floatingView"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="145dp"
+        android:layout_marginTop="@dimen/custom_interest_flow_view_margin_top"
+        android:layout_marginBottom="@dimen/custom_interest_flow_view_margin_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
     
     <TextView
         android:id="@+id/choosed"
-        android:background="@drawable/news_channel_interest_choosed_bg"
+        android:enabled="false"
+        android:background="@drawable/news_channel_interest_choosed_bg_selector"
+        android:layout_marginBottom="@dimen/custom_interest_choosed_margin_bottom"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:textColor="#a5a5a5"
-        android:textSize="16sp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:text="选好了"
-        android:layout_width="190dp"
-        android:layout_height="42dp"/>
+        android:text="@string/custom_interest_choosed_text"
+        android:textColor="@color/new_channel_interest_choosed_text_color_selector"
+        android:textSize="@dimen/custom_interest_choosed_text_size"
+        android:layout_width="@dimen/custom_interest_choosed_width"
+        android:layout_height="@dimen/custom_interest_choosed_height"/>
 
 </RelativeLayout>
 

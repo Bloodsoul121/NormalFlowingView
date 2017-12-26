@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="custom_interest_skip_text_color">#e6303030</color>
+    <color name="custom_interest_skip_bg_color">#c8c8c8</color>
+    <color name="custom_interest_big_title_text_color">#303030</color>
+    <color name="custom_interest_sub_title_text_color">#303030</color>
+    <color name="custom_interest_choosed_text_color">#a5a5a5</color>
+    <color name="custom_interest_choosed_text_color_enable">#ff9000</color>
+    <color name="custom_interest_choosed_bg_color">#a5a5a5</color>
+    <color name="custom_interest_choosed_enable_bg_color">#ff9000</color>
+
 </resources>

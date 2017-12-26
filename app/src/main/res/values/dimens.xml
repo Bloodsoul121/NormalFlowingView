@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="custom_interest_skip_text_size">12sp</dimen>
+    <dimen name="custom_interest_skip_margin_right">14dp</dimen>
+    <dimen name="custom_interest_skip_margin_top">14dp</dimen>
+    <dimen name="custom_interest_skip_width">51dp</dimen>
+    <dimen name="custom_interest_skip_height">27dp</dimen>
+    <dimen name="custom_interest_big_title_text_size">26sp</dimen>
+    <dimen name="custom_interest_big_title_margin_top">61dp</dimen>
+    <dimen name="custom_interest_sub_title_text_size">17sp</dimen>
+    <dimen name="custom_interest_sub_title_margin_top">16dp</dimen>
+    <dimen name="custom_interest_flow_view_margin_top">150dp</dimen>
+    <dimen name="custom_interest_flow_view_margin_bottom">145dp</dimen>
+    <dimen name="custom_interest_choosed_text_size">16sp</dimen>
+    <dimen name="custom_interest_choosed_margin_bottom">50dp</dimen>
+    <dimen name="custom_interest_choosed_width">190dp</dimen>
+    <dimen name="custom_interest_choosed_height">42dp</dimen>
+    <dimen name="custom_interest_dimen_21">21dp</dimen>
+    <dimen name="custom_interest_dimen_2">2dp</dimen>
+    <dimen name="custom_interest_dimen_1">1dp</dimen>
+    <dimen name="custom_interest_dimen_0.3">0.3dp</dimen>
+
+</resources>

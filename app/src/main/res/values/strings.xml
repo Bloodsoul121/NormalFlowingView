@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">NormalFlowingView</string>
+
+    <string name="custom_interest_skip_text">跳过</string>
+    <string name="custom_interest_big_title_text">定制我的个性内容</string>
+    <string name="custom_interest_sub_title_text">选择感兴趣频道, 呈现更多资讯</string>
+    <string name="custom_interest_choosed_text">选好了</string>
+
 </resources>

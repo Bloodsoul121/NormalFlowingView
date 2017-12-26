@@ -19,6 +19,10 @@ import java.util.Map;
 
 public class FlowActivity extends Activity implements BaseDrawer.OnItemClickListener, View.OnClickListener {
 
+    private TextView mSkipTv;
+
+    private TextView mChoosedTv;
+
     private ContainerView containerView;
 
     private Handler mHandler = new Handler();
@@ -36,10 +40,10 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
     }
 
     private void initView() {
-        TextView skipTv = (TextView) findViewById(R.id.skip);
-        TextView choosedTv = (TextView) findViewById(R.id.choosed);
-        skipTv.setOnClickListener(this);
-        choosedTv.setOnClickListener(this);
+        mSkipTv = (TextView) findViewById(R.id.skip);
+        mChoosedTv = (TextView) findViewById(R.id.choosed);
+        mSkipTv.setOnClickListener(this);
+        mChoosedTv.setOnClickListener(this);
         containerView = (ContainerView) findViewById(R.id.floatingView);
         FloatingDrawer drawer = new FloatingDrawer();
         containerView.setDrawer(drawer);
@@ -73,6 +77,12 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
 
     @Override
     public void onChannelItemClick(String childTitle) {
+        Log.i("FlowActivity", "choosed childTitle --> " + childTitle);
+        handleChannels(childTitle);
+        refreshChoosedStatus();
+    }
+
+    private void handleChannels(String childTitle) {
         Boolean isSelected = mSelects.get(childTitle);
         isSelected = isSelected == null ? false : isSelected;
         mSelects.put(childTitle, !isSelected);
@@ -80,6 +90,14 @@ public class FlowActivity extends Activity implements BaseDrawer.OnItemClickList
             mChannels.remove(childTitle);
         } else {
             mChannels.add(childTitle);
+        }
+    }
+
+    private void refreshChoosedStatus() {
+        if (mChannels != null && mChannels.size() > 0) {
+            mChoosedTv.setEnabled(true);
+        } else {
+            mChoosedTv.setEnabled(false);
         }
     }
 

@@ -114,7 +114,7 @@ public class FloatingDrawer extends BaseDrawer {
                     .setDx(0f)
                     .setDy(25f)
                     .setRadius(129f)
-                    .setPercentSpeed(0.0052f)
+                    .setPercentSpeed(0.0058f)
                     .setColorStart(Color.parseColor("#26ff2e6e"))
                     .setColorEnd(Color.parseColor("#26ff5799"))
                     .setSelectColorStart(Color.parseColor("#b3ff2e6e"))

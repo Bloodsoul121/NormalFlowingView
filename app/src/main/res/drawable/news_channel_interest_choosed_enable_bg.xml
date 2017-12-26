@@ -4,6 +4,6 @@
 
     <corners android:radius="@dimen/custom_interest_dimen_21"/>
 
-    <stroke android:color="@color/custom_interest_choosed_bg_color" android:width="@dimen/custom_interest_dimen_1"/>
+    <stroke android:color="@color/custom_interest_choosed_enable_bg_color" android:width="@dimen/custom_interest_dimen_1"/>
 
 </shape>
